@@ -1,0 +1,4 @@
+*.o
+.qmake*
+Makefile
+Sm64SpeedrunPlot
