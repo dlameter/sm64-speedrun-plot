@@ -16,6 +16,8 @@
 /* std includes */
 #include <iostream>
 
+#include "data_helper.h"
+
 QT_BEGIN_NAMESPACE
 QT_END_NAMESPACE
 
@@ -29,6 +31,28 @@ QT_USE_NAMESPACE
 
 int main(int argc, char** argv) {
     // Read in data from file
+    DataHelper helper("data/output.json");
+
+    if (!helper.isOpen()) {
+        std::cerr << "json wasn't opened successfully!" << std::endl;
+        return 1;
+    }
+
+    QList<QString> categories = helper.listCategories();
+
+    for (auto category : categories) {
+        std::cout << category.toStdString() << std::endl;
+
+        if (helper.categoryType(category) == DataHelper::CategoryType::PER_LEVEL) {
+            std::cout << "\tLevels:" << std::endl;
+
+            for (auto level : helper.listLevels(category)) {
+                std::cout << "\t" << level.toStdString() << std::endl;
+            }
+        }
+    }
+
+    /*
     QFile json_file("data/output.json");
 
     if (!json_file.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -88,6 +112,7 @@ int main(int argc, char** argv) {
     QJsonArray runs_array = runs.toArray();
 
     std::cout << runs_array[0].toObject().find("place").value().toInt() << std::endl;
+    */
 
     // Display chart
 
