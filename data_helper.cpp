@@ -63,9 +63,10 @@ QList<QString> DataHelper::listLevels(QString categoryName) {
 DataHelper::CategoryType DataHelper::categoryType(QString categoryName) {
     auto iter = root.find(categoryName);
     if (iter != root.end()) {
+        QJsonObject categoryObject = iter.value().toObject();
 
-        iter = iter.value().toObject().find("runs");
-        if (iter == root.end()) {
+        iter = categoryObject.find("runs");
+        if (iter == categoryObject.end()) {
             return DataHelper::CategoryType::PER_LEVEL;
         }
         else {
