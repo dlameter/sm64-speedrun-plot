@@ -45,6 +45,7 @@ QList<QString> DataHelper::listCategories() {
     return categories;
 }
 
+// TO-DO: throw an exception if it does not follow the correct data structure.
 DataHelper::CategoryType categoryType(QString categoryName) {
     auto iter = root.find(categoryName);
     if (iter != root.end()) {
