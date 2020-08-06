@@ -45,12 +45,26 @@ QList<QString> DataHelper::listCategories() {
     return categories;
 }
 
+QList<QString> DataHelper::listLevels(QString categoryName) {
+    QList<QString> levels;
+
+    if (categoryType(categoryName) == DataHelper::CategoryType::PER_LEVEL) {
+        auto categoryObject = root.find(categoryName).value().toObject();
+
+        for (auto iter = categoryObject.begin(); iter != categoryObject.end(); ++iter) {
+            levels.append(iter.key());
+        }
+    }
+
+    return levels;
+}
+
 // TO-DO: throw an exception if it does not follow the correct data structure.
-DataHelper::CategoryType categoryType(QString categoryName) {
+DataHelper::CategoryType DataHelper::categoryType(QString categoryName) {
     auto iter = root.find(categoryName);
     if (iter != root.end()) {
 
-        iter = iter.value().toObject.find("runs");
+        iter = iter.value().toObject().find("runs");
         if (iter == root.end()) {
             return DataHelper::CategoryType::PER_LEVEL;
         }
