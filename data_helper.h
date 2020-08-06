@@ -12,9 +12,6 @@ class DataHelper {
             PER_LEVEL
         };
 
-        QJsonDocument dataDoc;
-        bool opened;
-
         DataHelper(QString filename);
 
         bool isOpen();
@@ -32,6 +29,10 @@ class DataHelper {
         static int runTime(QJsonObject runObject);
         static QString runUser(QJsonObject runObject);
         static QDateTime runSubmittedDate(QJsonObject runObject);
+
+    private:
+        QJsonDocument dataDoc;
+        bool opened;
 };
 
 #endif
