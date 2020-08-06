@@ -53,24 +53,37 @@ int main(int argc, char** argv) {
     QScatterSeries* series1 = new QScatterSeries();
     series1->setName("Test data");
 
-    QJsonObject::iterator category_iter = root_object.find("120 Star");
-    if (category_iter == root_object.end()) {
+    QJsonObject::iterator json_iter = root_object.find("120 Star");
+    if (json_iter == root_object.end()) {
         std::cerr << "Could not find 120 Star in json object!" << std::endl;
         return 0;
     }
 
-    std::cout << category_iter.key().toStdString() << std::endl;
+    std::cout << json_iter.key().toStdString() << std::endl;
 
-    QJsonValueRef star120 = category_iter.value();
+    QJsonValueRef star120 = json_iter.value();
     if (!star120.isObject()) {
         std::cerr << "120 Star value is not an object!" << std::endl;
         return 0;
     }
 
-    QJsonValueRef runs = star120.toObject().find("runs").value();
+    std::cout << "finding runs" << std::endl;
+
+    QJsonObject temp_obj = star120.toObject();
+    json_iter = temp_obj.find("runs");
+    if (json_iter == temp_obj.end()) {
+        std::cerr << "Could not find runs member!" << std::endl;
+    }
+
+    std::cout << "runs array" << std::endl;
+
+    QJsonValueRef runs = json_iter.value();
     if (!runs.isArray()) {
         std::cerr << "run value is not an array!" << std::endl;
         return 0;
+    }
+    else {
+        std::cout << "runs value is an array!" << std::endl;
     }
     QJsonArray runs_array = runs.toArray();
 
