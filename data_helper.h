@@ -7,7 +7,7 @@
 
 class DataHelper {
     public:
-        enum CategoryType {
+        enum class CategoryType {
             REGULAR,
             PER_LEVEL
         };
