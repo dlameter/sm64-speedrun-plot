@@ -22,7 +22,7 @@ DataHelper::DataHelper(QString filename) {
         return;
     }
 
-    if (dataDoc.isObject()) {
+    if (!dataDoc.isObject()) {
         std::cerr << "DataHelper: Document root is not an object." << std::endl;
         return;
     }
