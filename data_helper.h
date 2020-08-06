@@ -13,9 +13,11 @@ class DataHelper {
         };
 
         QJsonDocument dataDoc;
+        bool opened;
 
         DataHelper(QString filename);
-        ~DataHelper();
+
+        bool isOpen();
 
         QList<QString> listCategories();
         QList<QString> listLevels(QString categoryName);
