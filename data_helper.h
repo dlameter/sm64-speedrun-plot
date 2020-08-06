@@ -32,7 +32,7 @@ class DataHelper {
 
     private:
         QJsonDocument dataDoc;
-        QJSonObject root;
+        QJsonObject root;
         bool opened;
 };
 
