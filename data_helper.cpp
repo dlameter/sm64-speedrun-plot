@@ -45,3 +45,18 @@ QList<QString> DataHelper::listCategories() {
     return categories;
 }
 
+DataHelper::CategoryType categoryType(QString categoryName) {
+    auto iter = root.find(categoryName);
+    if (iter != root.end()) {
+
+        iter = iter.value().toObject.find("runs");
+        if (iter == root.end()) {
+            return DataHelper::CategoryType::PER_LEVEL;
+        }
+        else {
+            return DataHelper::CategoryType::REGULAR;
+        }
+    }
+
+    return DataHelper::CategoryType::REGULAR;
+}
