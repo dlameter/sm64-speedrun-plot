@@ -1,5 +1,11 @@
 #include "data_helper.h"
 
+/* QCore includes */
+#include <QFile>
+
+/* std includes */
+#include <iostream>
+
 DataHelper::DataHelper(QString filename) {
     opened = false;
     QFile file(filename);
@@ -16,9 +22,26 @@ DataHelper::DataHelper(QString filename) {
         return;
     }
 
+    if (dataDoc.isObject()) {
+        std::cerr << "DataHelper: Document root is not an object." << std::endl;
+        return;
+    }
+    root = dataDoc.object();
+
     opened = true;
 }
 
 bool DataHelper::isOpen() {
     return opened;
 }
+
+QList<QString> DataHelper::listCategories() {
+    QList<QString> categories;
+
+    for (auto iter = root.begin(); iter != root.end(); ++iter) {
+        categories.append(iter.key());
+    }
+
+    return categories;
+}
+
