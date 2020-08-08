@@ -84,6 +84,7 @@ Category DataHelper::buildCategory(QString name, QJsonObject object) {
             runs.append(buildRun(arrayIter.value().toObject()));
         }
         catch (const std::exception& e) {
+            // Catch, display, and rethrow exceptions.
             std::cerr << e.what() << std::endl;
             throw;
         }
@@ -92,77 +93,4 @@ Category DataHelper::buildCategory(QString name, QJsonObject object) {
     }
 
     return Category(name, runs);
-}
-
-QList<QString> DataHelper::listCategories() {
-    QList<QString> categories;
-
-    for (auto iter = root.begin(); iter != root.end(); ++iter) {
-        categories.append(iter.key());
-    }
-
-    return categories;
-}
-
-QList<QString> DataHelper::listLevels(QString categoryName) {
-    QList<QString> levels;
-
-    if (categoryType(categoryName) == DataHelper::CategoryType::PER_LEVEL) {
-        auto categoryObject = root.find(categoryName).value().toObject();
-
-        for (auto iter = categoryObject.begin(); iter != categoryObject.end(); ++iter) {
-            levels.append(iter.key());
-        }
-    }
-
-    return levels;
-}
-
-// TO-DO: throw an exception if it does not follow the correct data structure.
-DataHelper::CategoryType DataHelper::categoryType(QString categoryName) {
-    auto iter = root.find(categoryName);
-    if (iter != root.end()) {
-        QJsonObject categoryObject = iter.value().toObject();
-
-        iter = categoryObject.find("runs");
-        if (iter == categoryObject.end()) {
-            return DataHelper::CategoryType::PER_LEVEL;
-        }
-        else {
-            return DataHelper::CategoryType::REGULAR;
-        }
-    }
-
-    return DataHelper::CategoryType::REGULAR;
-}
-
-int DataHelper::runCount(QString categoryName) {
-    auto iter = root.find(categoryName);
-    if (iter != root.end()) {
-        QJsonObject categoryObject = iter.value().toObject();
-
-        iter = categoryObject.find("runs");
-        if (iter != categoryObject.end()) {
-            return iter.value().toObject().count();
-        }
-    }
-
-    // runs not found.
-    return -1;
-}
-
-int DataHelper::runCount(QString categoryName, QString levelName) {
-    auto iter = root.find(categoryName);
-    if (iter != root.end()) {
-        QJsonObject categoryObject = iter.value().toObject();
-
-        // Get find level object
-        iter = categoryObject.find(levelName);
-        if (iter != categoryObject.end()) {
-            return iter.value().toArray().count();
-        }
-    }
-
-    // runs not found.
-    return -1;
 }
