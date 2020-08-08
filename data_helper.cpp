@@ -2,6 +2,7 @@
 
 /* QCore includes */
 #include <QFile>
+#include <QJsonArray>
 
 /* std includes */
 #include <iostream>
@@ -85,6 +86,22 @@ int DataHelper::runCount(QString categoryName) {
         iter = categoryObject.find("runs");
         if (iter != categoryObject.end()) {
             return iter.value().toObject().count();
+        }
+    }
+
+    // runs not found.
+    return -1;
+}
+
+int DataHelper::runCount(QString categoryName, QString levelName) {
+    auto iter = root.find(categoryName);
+    if (iter != root.end()) {
+        QJsonObject categoryObject = iter.value().toObject();
+
+        // Get find level object
+        iter = categoryObject.find(levelName);
+        if (iter != categoryObject.end()) {
+            return iter.value().toArray().count();
         }
     }
 
