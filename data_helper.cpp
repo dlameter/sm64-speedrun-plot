@@ -118,3 +118,27 @@ Level DataHelper::buildLevel(QString name, QJsonArray levelArray) {
 
     return Level(name, runs);
 }
+
+LeveledCategory DataHelper::buildLeveledCategory(QString name, QJsonObject object) {
+    QList<Level> levels;
+
+    auto iter = object.begin();
+    while (iter != object.end()) {
+        if (!iter.value().isArray()) {
+            throw std::exception("Leveled category member is not an array.");
+        }
+
+        try {
+            levels.append(buildLevel(iter.key(), iter.value().toArray()));
+        }
+        catch (const std::exception& e) {
+            // Catch, display, and rethrow exceptions.
+            std::cerr << e.what() << std::endl;
+            throw;
+        }
+
+        ++iter;
+    }
+
+    return LeveledCategory(name, levels);
+}
