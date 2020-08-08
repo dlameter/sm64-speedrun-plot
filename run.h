@@ -19,6 +19,6 @@ private:
     int m_time;
     QString m_user;
     QDateTime m_submittedDate;
-}
+};
 
 #endif
