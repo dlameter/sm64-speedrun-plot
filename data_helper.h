@@ -19,7 +19,7 @@ class DataHelper {
         Category buildCategory(QString name, QJsonObject object);
         Level buildLevel(QString name, QJsonArray levelArray);
         LeveledCategory buildLeveledCategory(QString name, QJsonObject object);
-        Game buildGame(QJsonObject root);
+        Game buildGame(QJsonObject rootObject);
 
         QJsonDocument dataDoc;
         QJsonObject root;

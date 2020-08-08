@@ -37,6 +37,10 @@ bool DataHelper::isOpen() {
     return opened;
 }
 
+Game DataHelper::getGame() {
+    return buildGame(root);
+}
+
 Run DataHelper::buildRun(QJsonObject runObject) {
     auto iter = runObject.find("place");
     if (iter == runObject.end() || !iter.value().isInt()) {
@@ -143,7 +147,7 @@ LeveledCategory DataHelper::buildLeveledCategory(QString name, QJsonObject objec
     return LeveledCategory(name, levels);
 }
 
-Game DataHelper::buildGame(QJsonObject root) {
+Game DataHelper::buildGame(QJsonObject rootObject) {
     QList<Category> categories;
     QList<LeveledCategory> leveledCategories;
     
