@@ -5,32 +5,22 @@
 #include <QJsonObject>
 #include <QDateTime>
 
+#include "game.h"
+
 class DataHelper {
     public:
-        enum class CategoryType {
-            REGULAR,
-            PER_LEVEL
-        };
-
         DataHelper(QString filename);
 
         bool isOpen();
-
-        QList<QString> listCategories();
-        QList<QString> listLevels(QString categoryName);
-        CategoryType categoryType(QString categoryName);
-        int runCount(QString categoryName);
-        int runCount(QString categoryName, QString levelName);
-        QJsonObject run(QString categoryName, int runNumber);
-        QJsonObject run(QString categoryName, QString levelName, int runNumber);
-
-        /* static helpers */
-        static int runPlace(QJsonObject runObject);
-        static int runTime(QJsonObject runObject);
-        static QString runUser(QJsonObject runObject);
-        static QDateTime runSubmittedDate(QJsonObject runObject);
+        Game getGame();
 
     private:
+        Run buildRun(QJsonObject runObject);
+        Category buildCategory(QJsonObject object);
+        Level buildLevel(QJsonObject levelObject);
+        LeveledCategory buildLeveledCategory(QJsonObject object);
+        Game buildGame(QJsonObject root);
+
         QJsonDocument dataDoc;
         QJsonObject root;
         bool opened;
