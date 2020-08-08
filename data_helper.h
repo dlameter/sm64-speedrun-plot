@@ -17,7 +17,7 @@ class DataHelper {
     private:
         Run buildRun(QJsonObject runObject);
         Category buildCategory(QString name, QJsonObject object);
-        Level buildLevel(QString name, QJsonObject levelObject);
+        Level buildLevel(QString name, QJsonArray levelArray);
         LeveledCategory buildLeveledCategory(QString name, QJsonObject object);
         Game buildGame(QJsonObject root);
 

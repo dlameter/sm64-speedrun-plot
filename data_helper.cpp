@@ -94,3 +94,27 @@ Category DataHelper::buildCategory(QString name, QJsonObject object) {
 
     return Category(name, runs);
 }
+
+Level DataHelper::buildLevel(QString name, QJsonArray levelArray) {
+    QList<Run> runs;
+
+    auto iter = levelArray.begin();
+    while (iter != levelArray.end()) {
+        if (!iter.value().isObject()) {
+            throw std::exception("Run array element is not an object.");
+        }
+
+        try {
+            runs.append(buildRun(iter.value().toObject()));
+        }
+        catch (const std::exception& e) {
+            // Catch, display, and rethrow exceptions.
+            std::cerr << e.what() << std::endl;
+            throw;
+        }
+        
+        ++iter;
+    }
+
+    return Level(name, runs);
+}
