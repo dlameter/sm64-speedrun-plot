@@ -4,7 +4,8 @@ Run::Run(int place, int time, QString user, QDateTime submittedDate):
     m_place(place),
     m_time(time),
     m_user(user),
-    m_submittedDate(submittedDate) {}
+    m_submittedDate(submittedDate) 
+{}
 
 int Run::getPlace() {
     return m_place;
