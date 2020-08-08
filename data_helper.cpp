@@ -142,3 +142,37 @@ LeveledCategory DataHelper::buildLeveledCategory(QString name, QJsonObject objec
 
     return LeveledCategory(name, levels);
 }
+
+Game DataHelper::buildGame(QJsonObject root) {
+    QList<Category> categories;
+    QList<LeveledCategory> leveledCategories;
+    
+    auto iter = root.begin();
+    while (iter != root.end()) {
+        if (!iter.value().isObject()) {
+            throw std::exception("Root object member is not an object.");
+        }
+
+        QJsonObject object = iter.value().toObject();
+        if (object.contains("runs")) {
+            try {
+                categories.append(buildCategory(iter.value(), object));
+            }
+            catch (const std::exception& e) {
+                // Rethrow exception
+                throw;
+            }
+        }
+        else {
+            try {
+                leveledCategories.append(buildLeveledCategory(iter.value(), object));
+            }
+            catch (const std::exception& e) {
+                //Rethrow exception
+                throw;
+            }
+        }
+    }
+
+    return Game(categories, leveledCategories);
+}
