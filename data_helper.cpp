@@ -36,6 +36,34 @@ bool DataHelper::isOpen() {
     return opened;
 }
 
+Run DataHelper::buildRun(QJsonObject runObject) {
+    auto iter = runObject.find("place");
+    if (iter == runObject.end() || !iter.value().isInt()) {
+        throw std::exception("Could not find int member 'place'");
+    }
+    int place = iter.value().toInt();
+
+    iter = runObject.find("time");
+    if (iter == runObject.end() || !iter.value().isInt()) {
+        throw std::exception("Could not find int member 'time'");
+    }
+    int time = iter.value().toInt();
+
+    iter = runObject.find("username");
+    if (iter == runObject.end() || !iter.value().isString()) {
+        throw std::exception("Could not find string member 'username'");
+    }
+    QString user = iter.value().toString();
+
+    iter = runObject.find("submitted_date");
+    if (iter == runObject.end() || !iter.value().isString()) {
+        throw std::exception("Could not find string member 'submitted_date'");
+    }
+    QDateTime submittedDate = QDateTime::fromString(iter.value().toString(), Qt::ISODate);
+
+    return new Run(place, time, user, submittedDate);
+}
+
 QList<QString> DataHelper::listCategories() {
     QList<QString> categories;
 
