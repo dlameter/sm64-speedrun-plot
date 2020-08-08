@@ -76,3 +76,18 @@ DataHelper::CategoryType DataHelper::categoryType(QString categoryName) {
 
     return DataHelper::CategoryType::REGULAR;
 }
+
+int DataHelper::runCount(QString categoryName) {
+    auto iter = root.find(categoryName);
+    if (iter != root.end()) {
+        QJsonObject categoryObject = iter.value().toObject();
+
+        iter = categoryObject.find("runs");
+        if (iter != categoryObject.end()) {
+            return iter.value().toObject().count();
+        }
+    }
+
+    // runs not found.
+    return -1;
+}
