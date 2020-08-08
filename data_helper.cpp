@@ -6,6 +6,7 @@
 
 /* std includes */
 #include <exception>
+#include <stdexcept>
 #include <iostream>
 
 DataHelper::DataHelper(QString filename) {
@@ -43,26 +44,29 @@ Game DataHelper::getGame() {
 
 Run DataHelper::buildRun(QJsonObject runObject) {
     auto iter = runObject.find("place");
-    if (iter == runObject.end() || !iter.value().isInt()) {
-        throw std::exception("Could not find int member 'place'");
+    if (iter == runObject.end() || !iter.value().isDouble()) {
+        throw std::runtime_error("Could not find int member 'place'");
     }
     int place = iter.value().toInt();
 
     iter = runObject.find("time");
-    if (iter == runObject.end() || !iter.value().isInt()) {
-        throw std::exception("Could not find int member 'time'");
+    if (iter == runObject.end() || !iter.value().isDouble()) {
+        throw std::runtime_error("Could not find int member 'time'");
     }
     int time = iter.value().toInt();
 
     iter = runObject.find("username");
     if (iter == runObject.end() || !iter.value().isString()) {
-        throw std::exception("Could not find string member 'username'");
+        throw std::runtime_error("Could not find string member 'username'");
     }
     QString user = iter.value().toString();
 
     iter = runObject.find("submitted_date");
-    if (iter == runObject.end() || !iter.value().isString()) {
-        throw std::exception("Could not find string member 'submitted_date'");
+    if (iter == runObject.end()) {
+        throw std::runtime_error("Could not find string member 'submitted_date'");
+    }
+    else if (!iter.value().isString()) {
+        throw std::runtime_error("Member 'submitted_date' is not a string");
     }
     QDateTime submittedDate = QDateTime::fromString(iter.value().toString(), Qt::ISODate);
 
@@ -73,19 +77,20 @@ Category DataHelper::buildCategory(QString name, QJsonObject object) {
     QList<Run> runs;
 
     auto iter = object.find("runs");
-    if (iter == object.end() || !iter.value().isArray()) { throw std::exception("Could not find array member 'runs'");
+    if (iter == object.end() || !iter.value().isArray()) { 
+        throw std::runtime_error("Could not find array member 'runs'");
     }
 
     QJsonArray runArray = iter.value().toArray();
 
     auto arrayIter = runArray.begin();
     while (arrayIter != runArray.end()) {
-        if (!arrayIter.value().isObject()) {
-            throw std::exception("Run array element is not an object.");
+        if (!arrayIter->isObject()) {
+            throw std::runtime_error("Run array element is not an object.");
         }
 
         try {
-            runs.append(buildRun(arrayIter.value().toObject()));
+            runs.append(buildRun(arrayIter->toObject()));
         }
         catch (const std::exception& e) {
             // Catch, display, and rethrow exceptions.
@@ -104,12 +109,12 @@ Level DataHelper::buildLevel(QString name, QJsonArray levelArray) {
 
     auto iter = levelArray.begin();
     while (iter != levelArray.end()) {
-        if (!iter.value().isObject()) {
-            throw std::exception("Run array element is not an object.");
+        if (!iter->isObject()) {
+            throw std::runtime_error("Run array element is not an object.");
         }
 
         try {
-            runs.append(buildRun(iter.value().toObject()));
+            runs.append(buildRun(iter->toObject()));
         }
         catch (const std::exception& e) {
             // Catch, display, and rethrow exceptions.
@@ -129,7 +134,7 @@ LeveledCategory DataHelper::buildLeveledCategory(QString name, QJsonObject objec
     auto iter = object.begin();
     while (iter != object.end()) {
         if (!iter.value().isArray()) {
-            throw std::exception("Leveled category member is not an array.");
+            throw std::runtime_error("Leveled category member is not an array.");
         }
 
         try {
@@ -151,16 +156,16 @@ Game DataHelper::buildGame(QJsonObject rootObject) {
     QList<Category> categories;
     QList<LeveledCategory> leveledCategories;
     
-    auto iter = root.begin();
-    while (iter != root.end()) {
+    auto iter = rootObject.begin();
+    while (iter != rootObject.end()) {
         if (!iter.value().isObject()) {
-            throw std::exception("Root object member is not an object.");
+            throw std::runtime_error("Root object member is not an object.");
         }
 
         QJsonObject object = iter.value().toObject();
         if (object.contains("runs")) {
             try {
-                categories.append(buildCategory(iter.value(), object));
+                categories.append(buildCategory(iter.key(), object));
             }
             catch (const std::exception& e) {
                 // Rethrow exception
@@ -169,7 +174,7 @@ Game DataHelper::buildGame(QJsonObject rootObject) {
         }
         else {
             try {
-                leveledCategories.append(buildLeveledCategory(iter.value(), object));
+                leveledCategories.append(buildLeveledCategory(iter.key(), object));
             }
             catch (const std::exception& e) {
                 //Rethrow exception
