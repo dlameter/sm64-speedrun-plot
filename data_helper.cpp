@@ -5,6 +5,7 @@
 #include <QJsonArray>
 
 /* std includes */
+#include <exception>
 #include <iostream>
 
 DataHelper::DataHelper(QString filename) {
@@ -61,7 +62,36 @@ Run DataHelper::buildRun(QJsonObject runObject) {
     }
     QDateTime submittedDate = QDateTime::fromString(iter.value().toString(), Qt::ISODate);
 
-    return new Run(place, time, user, submittedDate);
+    return Run(place, time, user, submittedDate);
+}
+
+Category DataHelper::buildCategory(QString name, QJsonObject object) {
+    QList<Run> runs;
+
+    auto iter = object.find("runs");
+    if (iter == object.end() || !iter.value().isArray()) { throw std::exception("Could not find array member 'runs'");
+    }
+
+    QJsonArray runArray = iter.value().toArray();
+
+    auto arrayIter = runArray.begin();
+    while (arrayIter != runArray.end()) {
+        if (!arrayIter.value().isObject()) {
+            throw std::exception("Run array element is not an object.");
+        }
+
+        try {
+            runs.append(buildRun(arrayIter.value().toObject()));
+        }
+        catch (const std::exception& e) {
+            std::cerr << e.what() << std::endl;
+            throw;
+        }
+        
+        ++arrayIter;
+    }
+
+    return Category(name, runs);
 }
 
 QList<QString> DataHelper::listCategories() {
