@@ -17,6 +17,7 @@
 #include <iostream>
 
 #include "data_helper.h"
+#include "game.h"
 
 QT_BEGIN_NAMESPACE
 QT_END_NAMESPACE
@@ -38,83 +39,13 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-    QList<QString> categories = helper.listCategories();
+    Game game = helper.getGame();
 
-    for (auto category : categories) {
-        std::cout << category.toStdString() << std::endl;
-
-        if (helper.categoryType(category) == DataHelper::CategoryType::PER_LEVEL) {
-            std::cout << "\tLevels:" << std::endl;
-
-            for (auto level : helper.listLevels(category)) {
-                std::cout << "\t" << level.toStdString() << std::endl;
-            }
-        }
-    }
-
-    /*
-    QFile json_file("data/output.json");
-
-    if (!json_file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        std::cerr << "Failed to open data file!" << std::endl;
-        return 0;
-    }
-
-    QJsonParseError json_error;
-    QJsonDocument json_doc = QJsonDocument::fromJson(json_file.readAll(), &json_error);
-    if (json_error.error != QJsonParseError::ParseError::NoError) {
-        std::cerr << "Failed to parse json file." << json_error.errorString().toStdString() << std::endl;
-        return 0;
-    }
-
-    if (json_doc.isObject()) {
-        std::cout << "Document is a json object!" << std::endl;
-    }
-
-    QJsonObject root_object = json_doc.object();
-
-    // move data to displayable qtchart objects
-    QScatterSeries* series1 = new QScatterSeries();
-    series1->setName("Test data");
-
-    QJsonObject::iterator json_iter = root_object.find("120 Star");
-    if (json_iter == root_object.end()) {
-        std::cerr << "Could not find 120 Star in json object!" << std::endl;
-        return 0;
-    }
-
-    std::cout << json_iter.key().toStdString() << std::endl;
-
-    QJsonValueRef star120 = json_iter.value();
-    if (!star120.isObject()) {
-        std::cerr << "120 Star value is not an object!" << std::endl;
-        return 0;
-    }
-
-    std::cout << "finding runs" << std::endl;
-
-    QJsonObject temp_obj = star120.toObject();
-    json_iter = temp_obj.find("runs");
-    if (json_iter == temp_obj.end()) {
-        std::cerr << "Could not find runs member!" << std::endl;
-    }
-
-    std::cout << "runs array" << std::endl;
-
-    QJsonValueRef runs = json_iter.value();
-    if (!runs.isArray()) {
-        std::cerr << "run value is not an array!" << std::endl;
-        return 0;
-    }
-    else {
-        std::cout << "runs value is an array!" << std::endl;
-    }
-    QJsonArray runs_array = runs.toArray();
-
-    std::cout << runs_array[0].toObject().find("place").value().toInt() << std::endl;
-    */
+    std::cout << "Number of categories: " << game.getCategories().size() << std::endl;
+    std::cout << "Number of categories: " << game.getLeveledCategories().size() << std::endl;
 
     // Display chart
+
 
     return 0;
 }
