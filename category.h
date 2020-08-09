@@ -5,11 +5,13 @@
 
 class Category {
 public:
-    Category(QString name, QList<Run>* runs);
+    Category(const QString& name, const QList<Run>& runs);
     virtual ~Category();
 
     QString getName();
+    void setName(const QString& name);
     QList<Run>* getRuns();
+    void append(const Run& run);
 
 private:
     QString m_name;

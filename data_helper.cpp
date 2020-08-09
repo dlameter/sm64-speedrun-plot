@@ -1,4 +1,5 @@
 #include "data_helper.h"
+#include "game.h"
 
 /* QCore includes */
 #include <QFile>
@@ -9,7 +10,7 @@
 #include <stdexcept>
 #include <iostream>
 
-DataHelper::DataHelper(QString filename) {
+DataHelper::DataHelper(const QString& filename) {
     opened = false;
     QFile file(filename);
 
@@ -42,7 +43,7 @@ Game DataHelper::getGame() {
     return buildGame(root);
 }
 
-Run DataHelper::buildRun(QJsonObject runObject) {
+Run DataHelper::buildRun(const QJsonObject& runObject) {
     auto iter = runObject.find("place");
     if (iter == runObject.end() || !iter.value().isDouble()) {
         throw std::runtime_error("Could not find int member 'place'");
@@ -65,15 +66,15 @@ Run DataHelper::buildRun(QJsonObject runObject) {
     if (iter == runObject.end()) {
         throw std::runtime_error("Could not find string member 'submitted_date'");
     }
-    else if (!iter.value().isString()) {
+    /*else if (!iter.value().isString()) {
         throw std::runtime_error("Member 'submitted_date' is not a string");
-    }
+    }*/
     QDateTime submittedDate = QDateTime::fromString(iter.value().toString(), Qt::ISODate);
 
     return Run(place, time, user, submittedDate);
 }
 
-Category DataHelper::buildCategory(QString name, QJsonObject object) {
+Category DataHelper::buildCategory(const QString& name, const QJsonObject& object) {
     QList<Run> runs;
 
     auto iter = object.find("runs");
@@ -104,7 +105,7 @@ Category DataHelper::buildCategory(QString name, QJsonObject object) {
     return Category(name, runs);
 }
 
-Level DataHelper::buildLevel(QString name, QJsonArray levelArray) {
+Level DataHelper::buildLevel(const QString& name, const QJsonArray& levelArray) {
     QList<Run> runs;
 
     auto iter = levelArray.begin();
@@ -128,7 +129,7 @@ Level DataHelper::buildLevel(QString name, QJsonArray levelArray) {
     return Level(name, runs);
 }
 
-LeveledCategory DataHelper::buildLeveledCategory(QString name, QJsonObject object) {
+LeveledCategory DataHelper::buildLeveledCategory(const QString& name, const QJsonObject& object) {
     QList<Level> levels;
 
     auto iter = object.begin();
@@ -152,7 +153,7 @@ LeveledCategory DataHelper::buildLeveledCategory(QString name, QJsonObject objec
     return LeveledCategory(name, levels);
 }
 
-Game DataHelper::buildGame(QJsonObject rootObject) {
+Game DataHelper::buildGame(const QJsonObject& rootObject) {
     QList<Category> categories;
     QList<LeveledCategory> leveledCategories;
     
@@ -173,14 +174,16 @@ Game DataHelper::buildGame(QJsonObject rootObject) {
             }
         }
         else {
-            try {
+            /*try {
                 leveledCategories.append(buildLeveledCategory(iter.key(), object));
             }
             catch (const std::exception& e) {
                 //Rethrow exception
                 throw;
-            }
+            }*/
         }
+
+        ++iter;
     }
 
     return Game(categories, leveledCategories);

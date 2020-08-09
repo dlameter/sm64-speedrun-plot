@@ -5,14 +5,17 @@
 
 class Level {
 public:
-    Level(QString name, QList<Run> runs);
+    Level(const QString& name, const QList<Run>& runs);
+    virtual ~Level();
 
     QString getName();
-    QList<Run> getRuns();
+    void setName(const QString& name);
+    QList<Run>* getRuns();
+    void append(const Run& run);
 
 private:
     QString m_name;
-    QList<Run> m_runs;
+    QList<Run>* m_runs;
 };
 
 #endif

@@ -9,17 +9,17 @@
 
 class DataHelper {
     public:
-        DataHelper(QString filename);
+        DataHelper(const QString& filename);
 
         bool isOpen();
         Game getGame();
 
     private:
-        Run buildRun(QJsonObject runObject);
-        Category buildCategory(QString name, QJsonObject object);
-        Level buildLevel(QString name, QJsonArray levelArray);
-        LeveledCategory buildLeveledCategory(QString name, QJsonObject object);
-        Game buildGame(QJsonObject rootObject);
+        Run buildRun(const QJsonObject& runObject);
+        Category buildCategory(const QString& name, const QJsonObject& object);
+        Level buildLevel(const QString& name, const QJsonArray& levelArray);
+        LeveledCategory buildLeveledCategory(const QString& name, const QJsonObject& object);
+        Game buildGame(const QJsonObject& rootObject);
 
         QJsonDocument dataDoc;
         QJsonObject root;

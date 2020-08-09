@@ -5,14 +5,17 @@
 
 class LeveledCategory {
 public:
-    LeveledCategory(QString name, QList<Level> levels);
+    LeveledCategory(const QString& name, const QList<Level>& levels);
+    virtual ~LeveledCategory();
 
     QString getName();
-    QList<Level> getLevels();
+    void setName(const QString& name);
+    QList<Level>* getLevels();
+    void append(const Level& level);
 
 private:
     QString m_name;
-    QList<Level> m_levels;
+    QList<Level>* m_levels;
 };
 
 #endif

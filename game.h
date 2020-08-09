@@ -6,14 +6,17 @@
 
 class Game {
 public:
-    Game(QList<Category> categories, QList<LeveledCategory> leveledCategories);
+    Game(const QList<Category>& categories, const QList<LeveledCategory>& leveledCategories);
+    virtual ~Game();
 
-    QList<Category> getCategories();
-    QList<LeveledCategory> getLeveledCategories();
+    QList<Category>* getCategories();
+    void appendCategory(const Category& category);
+    QList<LeveledCategory>* getLeveledCategories();
+    void appendLeveledCategory(const LeveledCategory& leveledCategory);
 
 private:
-    QList<Category> m_categories;
-    QList<LeveledCategory> m_leveledCategories;
+    QList<Category>* m_categories;
+    QList<LeveledCategory>* m_leveledCategories;
 };
 
 #endif
