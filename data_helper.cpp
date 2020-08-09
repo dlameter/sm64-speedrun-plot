@@ -1,5 +1,9 @@
 #include "data_helper.h"
+#include "category.h"
+#include "level.h"
+#include "leveled_category.h"
 #include "game.h"
+#include "run.h"
 
 /* QCore includes */
 #include <QFile>
@@ -174,13 +178,13 @@ Game DataHelper::buildGame(const QJsonObject& rootObject) {
             }
         }
         else {
-            /*try {
+            try {
                 leveledCategories.append(buildLeveledCategory(iter.key(), object));
             }
             catch (const std::exception& e) {
                 //Rethrow exception
                 throw;
-            }*/
+            }
         }
 
         ++iter;
