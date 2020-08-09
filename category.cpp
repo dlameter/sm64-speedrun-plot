@@ -1,16 +1,19 @@
 #include "category.h"
 
-Category::Category(const QString& name, const QList<Run>& runs): m_name(name) {
-    m_runs = new QList<Run>;
+Category::Category(): m_name("") {}
 
-    m_runs->append(runs);
+Category::Category(const QString& name, const QList<Run>& runs) {
+    m_name = QString(name);
+    m_runs.append(runs);
 }
 
-Category::~Category() {
-    delete(m_runs);
+Category::~Category() {}
+
+QString& Category::getName() {
+    return m_name;
 }
 
-QString Category::getName() {
+const QString& Category::getName() const {
     return m_name;
 }
 
@@ -18,10 +21,14 @@ void Category::setName(const QString& name) {
     m_name = name;
 }
 
-QList<Run>* Category::getRuns() {
+QList<Run>& Category::getRuns() {
+    return m_runs;
+}
+
+const QList<Run>& Category::getRuns() const {
     return m_runs;
 }
 
 void Category::append(const Run& run) {
-    m_runs->append(run);
+    m_runs.append(run);
 }

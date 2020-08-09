@@ -8,14 +8,16 @@ public:
     LeveledCategory(const QString& name, const QList<Level>& levels);
     virtual ~LeveledCategory();
 
-    QString getName();
+    QString&getName();
+    const QString&getName() const;
     void setName(const QString& name);
-    QList<Level>* getLevels();
+    QList<Level>& getLevels();
+    const QList<Level>& getLevels() const;
     void append(const Level& level);
 
 private:
     QString m_name;
-    QList<Level>* m_levels;
+    QList<Level> m_levels;
 };
 
 #endif
