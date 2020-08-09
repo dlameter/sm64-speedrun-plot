@@ -5,14 +5,15 @@
 
 class Category {
 public:
-    Category(QString name, QList<Run> runs);
+    Category(QString name, QList<Run>* runs);
+    virtual ~Category();
 
     QString getName();
-    QList<Run> getRuns();
+    QList<Run>* getRuns();
 
 private:
     QString m_name;
-    QList<Run> m_runs;
+    QList<Run>* m_runs;
 };
 
 #endif
