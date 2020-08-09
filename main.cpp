@@ -41,8 +41,8 @@ int main(int argc, char** argv) {
 
     Game game = helper.getGame();
 
-    std::cout << "Number of categories: " << game.getCategories().size() << std::endl;
-    std::cout << "Number of categories: " << game.getLeveledCategories().size() << std::endl;
+    std::cout << "Number of categories: " << game.getCategories()->size() << std::endl;
+    std::cout << "Number of categories: " << game.getLeveledCategories()->size() << std::endl;
 
     // Display chart
 
