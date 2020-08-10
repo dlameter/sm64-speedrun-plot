@@ -51,6 +51,7 @@ int main(int argc, char** argv) {
 
     // Create chart view and chart objects
     QChartView* view = new QChartView;
+    view->setRubberBand(QChartView::RectangleRubberBand);
 
     QChart* chart = new QChart;
     chart->setTitle("Super Mario 64 speedrun completion time vs date submitted");
