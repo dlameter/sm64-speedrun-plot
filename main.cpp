@@ -22,6 +22,8 @@
 #include "game.h"
 #include "run.h"
 
+#define MARKER_SIZE 7
+
 QT_BEGIN_NAMESPACE
 QT_END_NAMESPACE
 
@@ -102,6 +104,7 @@ int main(int argc, char** argv) {
 
         series = new QScatterSeries;
         series->setName(category.getName());
+        series->setMarkerSize(MARKER_SIZE);
 
         QList<Run> runs = category.getRuns();
         for (int i = 0; i < runs.size(); ++i) {
@@ -123,6 +126,7 @@ int main(int argc, char** argv) {
 
             series = new QScatterSeries;
             series->setName(leveledCategory.getName() + ": " + level.getName());
+            series->setMarkerSize(MARKER_SIZE);
 
             QList<Run> runs = level.getRuns();
             for (int k = 0; k < runs.size(); ++k) {
