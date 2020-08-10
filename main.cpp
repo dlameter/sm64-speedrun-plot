@@ -49,34 +49,6 @@ int main(int argc, char** argv) {
 
     Game game = helper.getGame();
 
-    std::cout << "Number of categories: " << game.getCategories().size() << std::endl;
-    std::cout << "Number of categories: " << game.getLeveledCategories().size() << std::endl;
-
-    QList<Category> categories = game.getCategories();
-    for (int i = 0; i < categories.size(); ++i) {
-        std::cout << "CATEGORY " << categories[i].getName().toStdString() << ":" << std::endl;
-
-        QList<Run> runs = categories[i].getRuns();
-        for (int j = 0; j < runs.size(); ++j) {
-            std::cout << "\tRUN " << runs[j].getUser().toStdString() << ", " << runs[j].getPlace() << std::endl;
-        }
-    }
-
-    QList<LeveledCategory> leveledCategories = game.getLeveledCategories();
-    for (int i = 0; i < leveledCategories.size(); ++i) {
-        std::cout << "LEVELED_CATEGORY " << leveledCategories[i].getName().toStdString() << ":" << std::endl;
-
-        QList<Level> levels = leveledCategories[i].getLevels();
-        for (int k = 0; k < levels.size(); ++k) {
-            std::cout << "\tLEVEL " << levels[k].getName().toStdString() << std::endl;
-
-            QList<Run> runs = levels[k].getRuns();
-            for (int j = 0; j < runs.size(); ++j) {
-                std::cout << "\t\tRUN " << runs[j].getUser().toStdString() << ", " << runs[j].getPlace() << std::endl;
-            }
-        }
-    }
-
     // Create chart view and chart objects
     QChartView* view = new QChartView;
 
@@ -98,7 +70,7 @@ int main(int argc, char** argv) {
     // Convert to chart data.
     QScatterSeries* series;
 
-    // Regular categories
+    QList<Category> categories = game.getCategories();
     for (int j = 0; j < categories.size(); ++j) {
         Category category = categories[j];
 
@@ -116,7 +88,7 @@ int main(int argc, char** argv) {
         series->attachAxis(dateAxis);
     }
 
-    // Leveled categories
+    QList<LeveledCategory> leveledCategories = game.getLeveledCategories();
     for (int i = 0; i < leveledCategories.size(); ++i) {
         LeveledCategory leveledCategory = leveledCategories[i];
 
