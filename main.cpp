@@ -75,32 +75,65 @@ int main(int argc, char** argv) {
         }
     }
 
-    // Convert to chart data.
+    // Create chart view and chart objects
     QChartView* view = new QChartView;
+
     QChart* chart = new QChart;
     chart->setTitle("Super Mario 64 speedrun completion time vs date submitted");
-    QScatterSeries* dataTest = new QScatterSeries;
-
-    Category catTest = categories[0];
-    dataTest->setName(catTest.getName());
-
-    QList<Run> runsTest = catTest.getRuns();
-    for (int i = 0; i < runsTest.size(); ++i) {
-        dataTest->append(runsTest[i].getSubmittedDate().toMSecsSinceEpoch(), runsTest[i].getTime());
-    }
-    chart->addSeries(dataTest);
 
     // Create chart axes
     QValueAxis* timeAxis = new QValueAxis;
     timeAxis->setTitleText("Completion Time");
+
     chart->addAxis(timeAxis, Qt::AlignLeft);
-    dataTest->attachAxis(timeAxis);
 
     QDateTimeAxis* dateAxis = new QDateTimeAxis;
     dateAxis->setFormat("yyyy MM dd");
     dateAxis->setTitleText("Date Submitted");
+
     chart->addAxis(dateAxis, Qt::AlignBottom);
-    dataTest->attachAxis(dateAxis);
+
+    // Convert to chart data.
+    QScatterSeries* series;
+
+    // Regular categories
+    for (int j = 0; j < categories.size(); ++j) {
+        Category category = categories[j];
+
+        series = new QScatterSeries;
+        series->setName(category.getName());
+
+        QList<Run> runs = category.getRuns();
+        for (int i = 0; i < runs.size(); ++i) {
+            series->append(runs[i].getSubmittedDate().toMSecsSinceEpoch(), runs[i].getTime());
+        }
+        chart->addSeries(series);
+
+        series->attachAxis(timeAxis);
+        series->attachAxis(dateAxis);
+    }
+
+    // Leveled categories
+    for (int i = 0; i < leveledCategories.size(); ++i) {
+        LeveledCategory leveledCategory = leveledCategories[i];
+
+        QList<Level> levels = leveledCategory.getLevels();
+        for (int j = 0; j < levels.size(); ++j) {
+            Level level = levels[j];
+
+            series = new QScatterSeries;
+            series->setName(leveledCategory.getName() + ": " + level.getName());
+
+            QList<Run> runs = level.getRuns();
+            for (int k = 0; k < runs.size(); ++k) {
+                series->append(runs[k].getSubmittedDate().toMSecsSinceEpoch(), runs[k].getTime());
+            }
+            chart->addSeries(series);
+
+            series->attachAxis(timeAxis);
+            series->attachAxis(dateAxis);
+        }
+    }
 
     view->setChart(chart);
 
