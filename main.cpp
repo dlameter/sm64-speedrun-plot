@@ -34,6 +34,9 @@ QT_USE_NAMESPACE
 
 
 int main(int argc, char** argv) {
+    // Init qt application
+    QApplication app(argc, argv);
+
     // Read in data from file
     DataHelper helper("data/output.json");
 
@@ -73,8 +76,39 @@ int main(int argc, char** argv) {
     }
 
     // Convert to chart data.
+    QChartView* view = new QChartView;
+    QChart* chart = new QChart;
+    chart->setTitle("Super Mario 64 speedrun completion time vs date submitted");
+    QScatterSeries* dataTest = new QScatterSeries;
+
+    Category catTest = categories[0];
+    dataTest->setName(catTest.getName());
+
+    QList<Run> runsTest = catTest.getRuns();
+    for (int i = 0; i < runsTest.size(); ++i) {
+        dataTest->append(runsTest[i].getSubmittedDate().toMSecsSinceEpoch(), runsTest[i].getTime());
+    }
+    chart->addSeries(dataTest);
+
+    // Create chart axes
+    QValueAxis* timeAxis = new QValueAxis;
+    timeAxis->setTitleText("Completion Time");
+    chart->addAxis(timeAxis, Qt::AlignLeft);
+    dataTest->attachAxis(timeAxis);
+
+    QDateTimeAxis* dateAxis = new QDateTimeAxis;
+    dateAxis->setFormat("yyyy MM dd");
+    dateAxis->setTitleText("Date Submitted");
+    chart->addAxis(dateAxis, Qt::AlignBottom);
+    dataTest->attachAxis(dateAxis);
+
+    view->setChart(chart);
 
     // Display chart
+    QMainWindow window;
+    window.setCentralWidget(view);
+    window.resize(800, 600);
+    window.show();
 
-    return 0;
+    return app.exec();
 }
