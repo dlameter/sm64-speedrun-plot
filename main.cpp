@@ -21,6 +21,7 @@
 #include "category.h"
 #include "game.h"
 #include "run.h"
+#include "interactive_qchart.h"
 
 #define MARKER_SIZE 7
 
@@ -51,9 +52,8 @@ int main(int argc, char** argv) {
 
     // Create chart view and chart objects
     QChartView* view = new QChartView;
-    view->setRubberBand(QChartView::RectangleRubberBand);
 
-    QChart* chart = new QChart;
+    InteractiveQChart* chart = new InteractiveQChart;
     chart->setTitle("Super Mario 64 speedrun completion time vs date submitted");
 
     // Create chart axes
