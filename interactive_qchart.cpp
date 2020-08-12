@@ -4,7 +4,7 @@ InteractiveQChart::InteractiveQChart(QGraphicsItem *parent, Qt::WindowFlags wFla
     QChart(parent, wFlags) 
 {
     m_buttonPressed = false;
-    m_zoom = 1.0;
+    m_lastMousePos = QPointF(0,0);
 }
 
 void InteractiveQChart::wheelEvent(QGraphicsSceneWheelEvent *event) {
@@ -16,6 +16,8 @@ void InteractiveQChart::wheelEvent(QGraphicsSceneWheelEvent *event) {
         else if (delta < 0) {
             zoom(0.9);
         }
+
+        event->accept();
     }
     else {
         event->ignore();
@@ -23,8 +25,42 @@ void InteractiveQChart::wheelEvent(QGraphicsSceneWheelEvent *event) {
 }
 
 void InteractiveQChart::mousePressEvent(QGraphicsSceneMouseEvent *event) {
-    if (event->buttons() | Qt::MidButton) {
+    if (event->buttons() == Qt::MidButton) {
         zoomReset();
+
+        event->accept();
+    }
+    else if (event->buttons() == Qt::RightButton) {
+        m_buttonPressed = true;
+        m_lastMousePos = event->pos();
+
+        event->accept();
+    }
+    else {
+        event->ignore();
+    }
+}
+
+void InteractiveQChart::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
+    if (m_buttonPressed) {
+        auto deltaPos = event->pos() - m_lastMousePos;
+        scroll(-deltaPos.x(), deltaPos.y());
+
+        m_lastMousePos = event->pos();
+
+        event->accept();
+    }
+    else {
+        event->ignore();
+    }
+}
+
+void InteractiveQChart::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
+    if (event->buttons() == Qt::RightButton) {
+        m_buttonPressed = false;
+        m_lastMousePos = QPointF(0,0);
+
+        event->accept();
     }
     else {
         event->ignore();
