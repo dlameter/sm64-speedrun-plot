@@ -55,6 +55,7 @@ int main(int argc, char** argv) {
 
     InteractiveQChart* chart = new InteractiveQChart;
     chart->setTitle("Super Mario 64 speedrun completion time vs date submitted");
+    chart->legend()->setAlignment(Qt::AlignRight);
 
     // Create chart axes
     QValueAxis* timeAxis = new QValueAxis;
