@@ -1,4 +1,5 @@
 /* QCore includes */
+#include <QColor>
 #include <QCoreApplication>
 #include <QDateTime>
 #include <QFile>
@@ -23,7 +24,7 @@
 #include "run.h"
 #include "interactive_qchart.h"
 
-#define MARKER_SIZE 7
+#define MARKER_SIZE 10
 
 QT_BEGIN_NAMESPACE
 QT_END_NAMESPACE
@@ -34,6 +35,31 @@ class QScatterSeries;
 QT_CHARTS_END_NAMESPACE
 
 QT_USE_NAMESPACE
+
+void buildColorList(QList<QColor>& colors) {
+    colors.append(QColor(128, 0, 0));       // Maroon
+    colors.append(QColor(170, 110, 40));    // Brown
+    colors.append(QColor(128, 128, 0));     // Olive
+    colors.append(QColor(0, 128, 128));     // Teal
+    colors.append(QColor(0, 0, 128));       // Navy
+    colors.append(QColor(230, 25, 75));     // Red
+    colors.append(QColor(245, 130, 48));    // Orange
+    colors.append(QColor(255, 255, 25));    // Yellow
+    colors.append(QColor(210, 245, 60));    // Lime
+    colors.append(QColor(60, 180, 75));     // Green
+    colors.append(QColor(70, 240, 240));    // Cyan
+    colors.append(QColor(0, 130, 200));     // Blue
+    colors.append(QColor(145, 30, 180));    // Purple
+    colors.append(QColor(240, 50, 230));    // Magenta
+    colors.append(QColor(250, 190, 212));   // Pink
+    colors.append(QColor(255, 215, 180));   // Apricot
+    colors.append(QColor(255, 250, 200));   // Beige
+    colors.append(QColor(170, 255, 195));   // Mint
+    colors.append(QColor(220, 190, 255));   // Lavender
+    colors.append(QColor(0, 0, 0));         // Black
+    colors.append(QColor(128, 128, 128));   // Grey
+    colors.append(QColor(255, 255, 255));   // White
+}
 
 int main(int argc, char** argv) {
     // Init qt application
@@ -72,6 +98,10 @@ int main(int argc, char** argv) {
     chart->addAxis(dateAxis, Qt::AlignBottom);
 
     // Convert to chart data.
+    QList<QColor> colors;
+    buildColorList(colors);
+    int colorPos = 0;
+
     QScatterSeries* series;
 
     QList<Category> categories = game.getCategories();
@@ -81,6 +111,8 @@ int main(int argc, char** argv) {
         series = new QScatterSeries;
         series->setName(category.getName());
         series->setMarkerSize(MARKER_SIZE);
+        series->setColor(colors[colorPos++]);
+        colorPos = colorPos % colors.size();
 
         QList<Run> runs = category.getRuns();
         for (int i = 0; i < runs.size(); ++i) {
@@ -103,6 +135,8 @@ int main(int argc, char** argv) {
             series = new QScatterSeries;
             series->setName(leveledCategory.getName() + ": " + level.getName());
             series->setMarkerSize(MARKER_SIZE);
+            series->setColor(colors[colorPos++]);
+            colorPos = colorPos % colors.size();
 
             QList<Run> runs = level.getRuns();
             for (int k = 0; k < runs.size(); ++k) {
