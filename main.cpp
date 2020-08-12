@@ -60,6 +60,7 @@ int main(int argc, char** argv) {
     // Create chart axes
     QValueAxis* timeAxis = new QValueAxis;
     timeAxis->setTitleText("Completion Time");
+    timeAxis->setTickCount(8);
 
     chart->addAxis(timeAxis, Qt::AlignLeft);
 
