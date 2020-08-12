@@ -35,7 +35,6 @@ QT_CHARTS_END_NAMESPACE
 
 QT_USE_NAMESPACE
 
-
 int main(int argc, char** argv) {
     // Init qt application
     QApplication app(argc, argv);
@@ -65,8 +64,10 @@ int main(int argc, char** argv) {
     chart->addAxis(timeAxis, Qt::AlignLeft);
 
     QDateTimeAxis* dateAxis = new QDateTimeAxis;
-    dateAxis->setFormat("yyyy MM dd");
+    dateAxis->setFormat("dd/MM/yyyy");
     dateAxis->setTitleText("Date Submitted");
+    dateAxis->setLabelsAngle(-75);
+    dateAxis->setTickCount(8);
 
     chart->addAxis(dateAxis, Qt::AlignBottom);
 
